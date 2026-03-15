@@ -4,31 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="RAANG (रंग) - A comprehensive color reference with 4340+ colors. Search, filter, and download color swatches. Perfect for designers, developers, and color enthusiasts.">
-    <meta name="keywords"
-        content="color reference, color palette, color codes, hex colors, RGB colors, HSL colors, color picker, color database, design colors">
-    <meta name="author" content="RAANG">
-    <meta name="theme-color" content="#0d0d0d">
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="format-detection" content="telephone=no">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="RAANG (रंग) — Comprehensive Color Reference Library">
-    <meta property="og:description"
-        content="Explore 4340+ colors with hex, RGB, and HSL values. Search by name, sort by hue/brightness, and download color swatches instantly.">
-    <meta property="og:url" content="https://raang.vercel.app">
-    <meta property="og:site_name" content="RAANG">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="RAANG (रंग) — Color Reference">
-    <meta name="twitter:description" content="Explore 4340+ colors with hex, RGB, and HSL values">
-    <link rel="canonical" href="https://raang.vercel.app">
-    <link rel="icon" type="image/svg+xml"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23FF6B6B'/></svg>"
-        id="favicon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <title>RAANG (रंग) — Comprehensive Color Reference Library</title>
+    <title>RAANG (रंग) — Color Reference</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap"
         rel="stylesheet">
@@ -826,34 +802,6 @@
             }
         }
     </style>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "RAANG (रंग)",
-        "description": "A comprehensive color reference library with 4340+ colors. Search, filter, and download color swatches in multiple formats.",
-        "url": "https://raang.vercel.app",
-        "applicationCategory": "DesignApplication",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "creator": {
-            "@type": "Organization",
-            "name": "RAANG"
-        }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "RAANG",
-        "url": "https://raang.vercel.app",
-        "description": "Color Reference Library - RAANG (रंग)"
-    }
-    </script>
 </head>
 
 <body>
@@ -862,31 +810,30 @@
         <div class="logo-block">
             <h1><span style="color: #FF6B6B;">R</span><span style="color: #4ECDC4;">A</span><span
                     style="color: #FFE66D;">A</span><span style="color: #95E1D3;">N</span><span
-                    style="color: #C7CEEA;">G</span><span style="color: #FF6B6B;"></span></h1>
+                    style="color: #C7CEEA;">G</span></h1>
+            <p>रंग</p>
         </div>
         <div class="header-controls">
             <div class="search-wrap">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.35-4.35" />
                 </svg>
-                <input type="search" id="search" placeholder="Search by name or hex…" autocomplete="off"
-                    aria-label="Search colors by name or hex code">
+                <input type="text" id="search" placeholder="Search by name or hex…" autocomplete="off">
             </div>
             <div class="controls-row">
-                <div class="btn-group" role="group" aria-label="View options">
-                    <button id="btn-grid" class="active" aria-label="Grid view">Grid</button>
-                    <button id="btn-list" aria-label="List view">List</button>
+                <div class="btn-group">
+                    <button id="btn-grid" class="active">Grid</button>
+                    <button id="btn-list">List</button>
                 </div>
-                <select class="sort-select" id="sort" aria-label="Sort colors by">
+                <select class="sort-select" id="sort">
                     <option value="name">Sort: Name</option>
                     <option value="hue">Sort: Hue</option>
                     <option value="brightness">Sort: Brightness</option>
                     <option value="saturation">Sort: Saturation</option>
                 </select>
             </div>
-            <div class="stat-bar" id="stat" role="status" aria-live="polite" aria-label="Color count"></div>
+            <div class="stat-bar" id="stat"></div>
         </div>
     </header>
 
@@ -928,11 +875,10 @@
                     <div class="modal-formats">
                         <div class="formats-label">Copy as</div>
                         <div class="format-tabs" id="format-tabs"></div>
-                        <div class="format-code" id="format-code" onclick="copyFormatCode()" role="button" tabindex="0"
-                            aria-label="Click to copy color code"></div>
+                        <div class="format-code" id="format-code" onclick="copyFormatCode()"></div>
                     </div>
                 </div>
-                <button class="modal-close" onclick="closeModal()" aria-label="Close color details modal">✕</button>
+                <button class="modal-close" onclick="closeModal()">✕</button>
             </div>
         </div>
     </div>
@@ -1287,26 +1233,11 @@
 
         function rotateLogoColors() {
             const spans = document.querySelectorAll('.logo-block h1 span:not(#dot)');
-            const dot = document.getElementById('dot');
             const currentPalette = colorPalette[colorPaletteIndex % colorPalette.length];
 
             spans.forEach((span, index) => {
                 span.style.color = currentPalette[index];
             });
-
-            // Update dot color (use first color in palette)
-            const dotColor = currentPalette[0];
-            if (dot) {
-                dot.style.color = dotColor;
-            }
-
-            // Update favicon with new color
-            const faviconColor = dotColor.replace('#', '%23');
-            const faviconSvg = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='${faviconColor}'/></svg>`;
-            const favicon = document.getElementById('favicon');
-            if (favicon) {
-                favicon.href = faviconSvg;
-            }
 
             colorPaletteIndex++;
         }
