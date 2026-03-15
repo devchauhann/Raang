@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="RAANG (रंग) - A comprehensive color reference with 4340+ colors. Search, filter, and download color swatches. Perfect for designers, developers, and color enthusiasts.">
+    <meta name="keywords"
+        content="color reference, color palette, color codes, hex colors, RGB colors, HSL colors, color picker, color database, design colors">
+    <meta name="author" content="RAANG">
+    <meta name="theme-color" content="#0d0d0d">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="RAANG (रंग) — Comprehensive Color Reference Library">
+    <meta property="og:description"
+        content="Explore 4340+ colors with hex, RGB, and HSL values. Search by name, sort by hue/brightness, and download color swatches instantly.">
+    <meta property="og:url" content="https://raang.vercel.app">
+    <meta property="og:site_name" content="RAANG">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="RAANG (रंग) — Color Reference">
+    <meta name="twitter:description" content="Explore 4340+ colors with hex, RGB, and HSL values">
+    <link rel="canonical" href="https://raang.vercel.app">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23FF6B6B'/></svg>"
+        id="favicon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>RAANG (रंग) — Comprehensive Color Reference Library</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0d0d;
+            --surface: #161616;
+            --surface2: #1e1e1e;
+            --border: #2a2a2a;
+            --text: #f0ede8;
+            --text-muted: #888;
+            --text-faint: #444;
+            --accent: #f0ede8;
+            --radius: 4px;
+            --card-size: 200px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        header {
+            padding: 60px 60px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+
+        @media (max-width: 700px) {
+            header {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+
+        .logo-block h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.8rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        @media (max-width: 700px) {
+            .logo-block {
+                width: 100%;
+            }
+        }
+
+        .logo-block h1 span {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: currentColor;
+            margin-left: 4px;
+            vertical-align: middle;
+            margin-bottom: 6px;
+            transition: background 0.3s;
+        }
+
+        .logo-block h1 span:not(#dot) {
+            width: auto;
+            height: auto;
+            border-radius: 0;
+            background: transparent;
+            margin-left: 0;
+            margin-bottom: 0;
+        }
+
+        .logo-block h1 #dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: currentColor;
+            margin-left: 4px;
+            vertical-align: middle;
+            margin-bottom: 6px;
+            transition: background 0.3s;
+        }
+
+        .logo-block p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-top: 8px;
+            font-family: 'DM Mono', monospace;
+        }
+
+        .header-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        @media (max-width: 700px) {
+            .header-controls {
+                align-items: center;
+                width: 100%;
+                order: 3;
+                flex-direction: column;
+            }
+        }
+
+        .search-wrap {
+            position: relative;
+        }
+
+        @media (max-width: 700px) {
+            .search-wrap {
+                width: 100%;
+            }
+        }
+
+        .search-wrap input {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.82rem;
+            padding: 10px 16px 10px 40px;
+            border-radius: 2px;
+            width: 280px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        @media (max-width: 700px) {
+            .search-wrap input {
+                width: 100%;
+            }
+        }
+
+        .search-wrap input:focus {
+            border-color: #555;
+        }
+
+        .search-wrap input::placeholder {
+            color: var(--text-faint);
+        }
+
+        .search-wrap svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.4;
+        }
+
+        .controls-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        @media (max-width: 700px) {
+            .controls-row {
+                width: 100%;
+                flex-direction: row;
+                gap: 8px;
+            }
+        }
+
+        @media (min-width: 701px) {
+            .controls-row {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .header-controls {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .search-wrap {
+                order: -1;
+                margin-right: 8px;
+            }
+        }
+
+        .btn-group {
+            display: flex;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        @media (max-width: 700px) {
+            .btn-group {
+                width: auto;
+                flex: 0 1 auto;
+            }
+        }
+
+        .btn-group button {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 7px 12px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: 'DM Mono', monospace;
+            letter-spacing: 0.05em;
+            transition: background 0.15s, color 0.15s;
+            border-right: 1px solid var(--border);
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-group button:last-child {
+            border-right: none;
+        }
+
+        .btn-group button.active {
+            background: var(--surface2);
+            color: var(--text);
+        }
+
+        .btn-group button:hover:not(.active) {
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .sort-select {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            padding: 7px 12px;
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        @media (max-width: 700px) {
+            .sort-select {
+                width: auto;
+                flex: 1;
+            }
+        }
+
+        .stat-bar {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-faint);
+            letter-spacing: 0.08em;
+        }
+
+        @media (max-width: 700px) {
+            .stat-bar {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* MAIN */
+        main {
+            padding: 40px 60px 80px;
+        }
+
+        /* GRID VIEW */
+        #color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(var(--card-size), 1fr));
+            gap: 16px;
+        }
+
+        .color-card {
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: var(--radius);
+            animation: fadeUp 0.4s both;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .color-swatch {
+            width: 100%;
+            height: 140px;
+            transition: transform 0.3s ease;
+        }
+
+        .color-card:hover .color-swatch {
+            transform: scale(1.04);
+        }
+
+        .color-info {
+            background: var(--surface);
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 var(--radius) var(--radius);
+        }
+
+        @media (max-width: 700px) {
+            .color-info {
+                padding: 4px 6px;
+            }
+        }
+
+        .color-name {
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 3px;
+        }
+
+        @media (max-width: 700px) {
+            .color-name {
+                font-size: 0.65rem;
+                margin-bottom: 1px;
+            }
+        }
+
+        .color-hex {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 700px) {
+            .color-hex {
+                font-size: 0.6rem;
+            }
+        }
+
+        .color-card-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 700px) {
+            .color-card-actions {
+                margin-top: 2px;
+            }
+        }
+
+        .color-download-btn {
+            flex: 1;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 6px 8px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        @media (max-width: 700px) {
+            .color-download-btn {
+                padding: 3px 5px;
+                font-size: 0.55rem;
+            }
+        }
+
+        .copy-flash {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            padding: 3px 7px;
+            border-radius: 2px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            letter-spacing: 0.05em;
+        }
+
+        .color-card.copied .copy-flash {
+            opacity: 1;
+        }
+
+        /* LIST VIEW */
+        #color-list {
+            display: none;
+        }
+
+        .list-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 110px 130px auto;
+            align-items: center;
+            gap: 20px;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.15s;
+            border-radius: var(--radius);
+            animation: fadeUp 0.3s both;
+        }
+
+        .list-row:hover {
+            background: var(--surface);
+        }
+
+        .list-swatch {
+            width: 40px;
+            height: 40px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .list-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .list-hex {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+        }
+
+        .list-rgb {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-faint);
+        }
+
+        .list-id {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-faint);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+            backdrop-filter: blur(6px);
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            width: min(600px, 92vw);
+            overflow: hidden;
+            transform: translateY(20px);
+            transition: transform 0.25s;
+        }
+
+        .modal-overlay.open .modal {
+            transform: translateY(0);
+        }
+
+        .modal-hero {
+            height: 180px;
+            width: 100%;
+        }
+
+        .modal-body {
+            padding: 28px 32px 32px;
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .modal-id {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-faint);
+            letter-spacing: 0.06em;
+            margin-bottom: 24px;
+        }
+
+        .modal-values {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .val-box {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            position: relative;
+        }
+
+        .val-box:hover {
+            border-color: #555;
+        }
+
+        .val-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            color: var(--text-faint);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .val-value {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .val-hint {
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-faint);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .val-box:hover .val-hint {
+            opacity: 1;
+        }
+
+        .modal-formats {
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .formats-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-faint);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .format-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 10px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .format-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .ftab {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.68rem;
+            padding: 5px 10px;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .ftab.active {
+            background: var(--surface2);
+            color: var(--text);
+            border-color: #555;
+        }
+
+        .format-code {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 12px 16px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            white-space: pre;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            overflow-x: auto;
+        }
+
+        .format-code:hover {
+            border-color: #555;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 16px 20px;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .modal-wrap {
+            position: relative;
+        }
+
+        /* NO RESULTS */
+        .no-results {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-faint);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            display: none;
+        }
+
+        /* PAGINATION */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            padding: 40px 20px;
+            margin-top: 40px;
+        }
+
+        .pagination button {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 10px 16px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: var(--surface2);
+            color: var(--text);
+            border-color: #555;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-info {
+            color: var(--text-muted);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--text);
+            color: var(--bg);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            padding: 10px 20px;
+            border-radius: 2px;
+            letter-spacing: 0.06em;
+            opacity: 0;
+            transition: all 0.25s;
+            z-index: 300;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 700px) {
+            header {
+                padding: 30px 20px 24px;
+            }
+
+            main {
+                padding: 24px 20px 60px;
+            }
+
+            .modal-values {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            :root {
+                --card-size: 150px;
+            }
+
+            .list-row {
+                grid-template-columns: 44px 1fr 90px;
+            }
+
+            .list-id,
+            .list-rgb {
+                display: none;
+            }
+        }
+    </style>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "RAANG (रंग)",
+        "description": "A comprehensive color reference library with 4340+ colors. Search, filter, and download color swatches in multiple formats.",
+        "url": "https://raang.vercel.app",
+        "applicationCategory": "DesignApplication",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "creator": {
+            "@type": "Organization",
+            "name": "RAANG"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "RAANG",
+        "url": "https://raang.vercel.app",
+        "description": "Color Reference Library - RAANG (रंग)"
+    }
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo-block">
+            <h1><span style="color: #FF6B6B;">R</span><span style="color: #4ECDC4;">A</span><span
+                    style="color: #FFE66D;">A</span><span style="color: #95E1D3;">N</span><span
+                    style="color: #C7CEEA;">G</span><span style="color: #FF6B6B;"></span></h1>
+        </div>
+        <div class="header-controls">
+            <div class="search-wrap">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input type="search" id="search" placeholder="Search by name or hex…" autocomplete="off"
+                    aria-label="Search colors by name or hex code">
+            </div>
+            <div class="controls-row">
+                <div class="btn-group" role="group" aria-label="View options">
+                    <button id="btn-grid" class="active" aria-label="Grid view">Grid</button>
+                    <button id="btn-list" aria-label="List view">List</button>
+                </div>
+                <select class="sort-select" id="sort" aria-label="Sort colors by">
+                    <option value="name">Sort: Name</option>
+                    <option value="hue">Sort: Hue</option>
+                    <option value="brightness">Sort: Brightness</option>
+                    <option value="saturation">Sort: Saturation</option>
+                </select>
+            </div>
+            <div class="stat-bar" id="stat" role="status" aria-live="polite" aria-label="Color count"></div>
+        </div>
+    </header>
+
+    <main>
+        <div id="color-grid"></div>
+        <div id="color-list"></div>
+        <div class="no-results" id="no-results">No colors match your search.</div>
+        <div class="pagination" id="pagination">
+            <button id="prev-btn" onclick="prevPage()">← Previous</button>
+            <span class="page-info" id="page-info"></span>
+            <button id="next-btn" onclick="nextPage()">Next →</button>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-wrap">
+            <div class="modal" id="modal">
+                <div class="modal-hero" id="modal-hero"></div>
+                <div class="modal-body">
+                    <h2 class="modal-title" id="modal-title"></h2>
+                    <div class="modal-id" id="modal-id"></div>
+                    <div class="modal-values">
+                        <div class="val-box" onclick="copyVal(this,'hex')">
+                            <div class="val-label">HEX</div>
+                            <div class="val-value" id="modal-hex"></div>
+                            <div class="val-hint">click to copy</div>
+                        </div>
+                        <div class="val-box" onclick="copyVal(this,'rgb')">
+                            <div class="val-label">RGB</div>
+                            <div class="val-value" id="modal-rgb"></div>
+                            <div class="val-hint">click to copy</div>
+                        </div>
+                        <div class="val-box" onclick="copyVal(this,'hsl')">
+                            <div class="val-label">HSL</div>
+                            <div class="val-value" id="modal-hsl"></div>
+                            <div class="val-hint">click to copy</div>
+                        </div>
+                    </div>
+                    <div class="modal-formats">
+                        <div class="formats-label">Copy as</div>
+                        <div class="format-tabs" id="format-tabs"></div>
+                        <div class="format-code" id="format-code" onclick="copyFormatCode()" role="button" tabindex="0"
+                            aria-label="Click to copy color code"></div>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="closeModal()" aria-label="Close color details modal">✕</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ─── DATA ───────────────────────────────────────────────────────────────────
+        let COLORS = [];
+
+        function loadColors() {
+            return fetch('data.json')
+                .then(response => response.json())
+                .then(data => {
+                    COLORS = data;
+                    render();
+                    return COLORS;
+                })
+                .catch(e => {
+                    console.error('Failed to load colors:', e);
+                    return [];
+                });
+        }
+
+        // ─── STATE ──────────────────────────────────────────────────────────────────
+        let view = 'grid';
+        let query = '';
+        let sortBy = 'name';
+        let activeColor = null;
+        let activeFormat = 'hex';
+        let currentPage = 1;
+        const ITEMS_PER_PAGE = 150;
+
+        // ─── UTILITIES ──────────────────────────────────────────────────────────────
+        function hexToHsl(hex) {
+            let r = parseInt(hex.slice(1, 3), 16) / 255;
+            let g = parseInt(hex.slice(3, 5), 16) / 255;
+            let b = parseInt(hex.slice(5, 7), 16) / 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            if (max === min) { h = s = 0; }
+            else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+            return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
+        }
+
+        function brightness(rgb) {
+            return (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
+        }
+
+        function contrastColor(hex) {
+            const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+            return (0.299 * r + 0.587 * g + 0.114 * b) > 128 ? '#111' : '#fff';
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(t._t);
+            t._t = setTimeout(() => t.classList.remove('show'), 1800);
+        }
+
+        async function copyText(text) {
+            try { await navigator.clipboard.writeText(text); } catch (e) { }
+            showToast('Copied ' + text);
+        }
+
+        function getSorted(arr) {
+            return [...arr].sort((a, b) => {
+                if (sortBy === 'name') return a.name.localeCompare(b.name);
+                if (sortBy === 'hue') return hexToHsl(a.hex)[0] - hexToHsl(b.hex)[0];
+                if (sortBy === 'brightness') return brightness(a.rgb) - brightness(b.rgb);
+                if (sortBy === 'saturation') return hexToHsl(a.hex)[1] - hexToHsl(b.hex)[1];
+            });
+        }
+
+        function getFiltered() {
+            const q = query.toLowerCase().trim();
+            if (!q) return getSorted(COLORS);
+            return getSorted(COLORS.filter(c =>
+                c.name.toLowerCase().includes(q) ||
+                c.hex.toLowerCase().includes(q) ||
+                c.id.toLowerCase().includes(q)
+            ));
+        }
+
+        function getPaginatedList() {
+            const filtered = getFiltered();
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            return filtered.slice(start, end);
+        }
+
+        function getTotalPages() {
+            return Math.ceil(getFiltered().length / ITEMS_PER_PAGE);
+        }
+
+        function updatePagination() {
+            const totalPages = getTotalPages();
+            const pageInfo = document.getElementById('page-info');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const pagination = document.getElementById('pagination');
+
+            if (getFiltered().length === 0) {
+                pagination.style.display = 'none';
+                return;
+            }
+
+            pagination.style.display = 'flex';
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+
+            // Update URL
+            const params = new URLSearchParams(window.location.search);
+            if (currentPage > 1) {
+                params.set('page', currentPage);
+                window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+            } else {
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < getTotalPages()) {
+                currentPage++;
+                render();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                render();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // ─── RENDER ─────────────────────────────────────────────────────────────────
+        function render() {
+            const filtered = getFiltered();
+            const list = getPaginatedList();
+            document.getElementById('stat').textContent =
+                list.length + ' of ' + filtered.length + ' colors';
+            document.getElementById('no-results').style.display = filtered.length ? 'none' : 'block';
+
+            const grid = document.getElementById('color-grid');
+            const listEl = document.getElementById('color-list');
+
+            if (view === 'grid') {
+                grid.style.display = 'grid';
+                listEl.style.display = 'none';
+                grid.innerHTML = list.map((c, i) => `
+      <div class="color-card" style="animation-delay:${Math.min(i * 0.015, 0.5)}s">
+        <div class="color-swatch" style="background:${c.hex}" onclick="openModal('${c.id}')"></div>
+        <div class="color-info">
+          <div class="color-name" onclick="openModal('${c.id}')" style="cursor:pointer">${c.name}</div>
+          <div class="color-hex" onclick="openModal('${c.id}')" style="cursor:pointer">${c.hex.toUpperCase()}</div>
+          <div class="color-card-actions">
+            <button class="color-download-btn" onclick="downloadColor('${c.hex}', '${c.name}')">↓ Download</button>
+          </div>
+        </div>
+        <div class="copy-flash">Copied!</div>
+      </div>
+    `).join('');
+            } else {
+                grid.style.display = 'none';
+                listEl.style.display = 'block';
+                listEl.innerHTML = list.map((c, i) => `
+      <div class="list-row" style="animation-delay:${Math.min(i * 0.01, 0.4)}s"
+           onclick="openModal('${c.id}')">
+        <div class="list-swatch" style="background:${c.hex}"></div>
+        <div class="list-name">${c.name}</div>
+        <div class="list-hex">${c.hex.toUpperCase()}</div>
+        <div class="list-rgb">rgb(${c.rgb.join(', ')})</div>
+        <div class="list-id">${c.id}</div>
+      </div>
+    `).join('');
+            }
+
+            updatePagination();
+        }
+
+        // ─── MODAL ──────────────────────────────────────────────────────────────────
+        const FORMATS = {
+            hex: c => c.hex.toUpperCase(),
+            rgb: c => `rgb(${c.rgb.join(', ')})`,
+            hsl: c => { const h = hexToHsl(c.hex); return `hsl(${h[0]}, ${h[1]}%, ${h[2]}%)`; },
+            css: c => `--color-${c.id.replace(/_/g, '-')}: ${c.hex};`,
+            json: c => `{\n  "name": "${c.name}",\n  "hex": "${c.hex}",\n  "rgb": [${c.rgb.join(', ')}]\n}`,
+            csv: c => `${c.id},"${c.name}",${c.hex},${c.rgb.join(',')}`,
+            c: c => `#define COLOR_${c.id.toUpperCase()} 0x${c.hex.slice(1).toUpperCase()}UL`,
+            xml: c => `<color id="${c.id}" hex="${c.hex}" red="${c.rgb[0]}" green="${c.rgb[1]}" blue="${c.rgb[2]}">${c.name}</color>`,
+        };
+
+        function openModal(id) {
+            const c = COLORS.find(x => x.id === id);
+            if (!c) return;
+            activeColor = c;
+            const hsl = hexToHsl(c.hex);
+            document.getElementById('modal-hero').style.background = c.hex;
+            document.getElementById('modal-title').textContent = c.name;
+            document.getElementById('modal-id').textContent = c.id;
+            document.getElementById('modal-hex').textContent = c.hex.toUpperCase();
+            document.getElementById('modal-rgb').textContent = `${c.rgb[0]}, ${c.rgb[1]}, ${c.rgb[2]}`;
+            document.getElementById('modal-hsl').textContent = `${hsl[0]}°, ${hsl[1]}%, ${hsl[2]}%`;
+
+            // Update dot
+            document.getElementById('dot').style.background = c.hex;
+
+            // Format tabs
+            const tabs = document.getElementById('format-tabs');
+            tabs.innerHTML = Object.keys(FORMATS).map(f => `
+    <button class="ftab ${f === activeFormat ? 'active' : ''}" onclick="setFormat('${f}')">${f.toUpperCase()}</button>
+  `).join('');
+
+            // Update URL with color slug
+            const slug = c.id.replace(/_/g, '-');
+            const params = new URLSearchParams(window.location.search);
+            params.set('color', slug);
+            window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+
+            updateFormatCode();
+            document.getElementById('modal-overlay').classList.add('open');
+            document.body.classList.add('modal-open');
+        }
+
+        function setFormat(f) {
+            activeFormat = f;
+            document.querySelectorAll('.ftab').forEach(b => {
+                b.classList.toggle('active', b.textContent.toLowerCase() === f);
+            });
+            updateFormatCode();
+        }
+
+        function updateFormatCode() {
+            if (!activeColor) return;
+            document.getElementById('format-code').textContent = FORMATS[activeFormat](activeColor);
+        }
+
+        function copyFormatCode() {
+            if (!activeColor) return;
+            copyText(FORMATS[activeFormat](activeColor));
+        }
+
+        function copyVal(el, type) {
+            if (!activeColor) return;
+            const vals = {
+                hex: activeColor.hex.toUpperCase(),
+                rgb: `rgb(${activeColor.rgb.join(', ')})`,
+                hsl: (() => { const h = hexToHsl(activeColor.hex); return `hsl(${h[0]}, ${h[1]}%, ${h[2]}%)`; })()
+            };
+            copyText(vals[type]);
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('open');
+            document.getElementById('dot').style.background = 'currentColor';
+            document.body.classList.remove('modal-open');
+
+            // Remove color from URL
+            const params = new URLSearchParams(window.location.search);
+            params.delete('color');
+            const newUrl = params.toString() ? `${window.location.pathname}?${params}` : window.location.pathname;
+            window.history.replaceState({}, '', newUrl);
+        }
+
+        document.getElementById('modal-overlay').addEventListener('click', e => {
+            if (e.target === document.getElementById('modal-overlay')) closeModal();
+        });
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+        // ─── DOWNLOAD ──────────────────────────────────────────────────────────────
+        function downloadColor(hex, name) {
+            event.stopPropagation();
+
+            // Create SVG swatch
+            const svgContent = `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="${hex}"/>
+  <text x="100" y="90" font-family="Arial" font-size="24" fill="${(hex.replace('#', '').match(/.{1,2}/g).map(x => parseInt(x, 16)).reduce((a, b) => a + b) / 3) > 128 ? '#000' : '#fff'}" text-anchor="middle" font-weight="bold">${hex.toUpperCase()}</text>
+  <text x="100" y="130" font-family="Arial" font-size="16" fill="${(hex.replace('#', '').match(/.{1,2}/g).map(x => parseInt(x, 16)).reduce((a, b) => a + b) / 3) > 128 ? '#000' : '#fff'}" text-anchor="middle">${name}</text>
+</svg>`;
+
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${name.replace(/\s+/g, '-').toLowerCase()}.svg`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            showToast(`Downloaded ${name}`);
+        }
+
+        // ─── CONTROLS ───────────────────────────────────────────────────────────────
+        document.getElementById('search').addEventListener('input', e => {
+            query = e.target.value;
+            currentPage = 1;
+            render();
+        });
+
+        document.getElementById('sort').addEventListener('change', e => {
+            sortBy = e.target.value;
+            currentPage = 1;
+            render();
+        });
+
+        document.getElementById('btn-grid').addEventListener('click', () => {
+            view = 'grid';
+            document.getElementById('btn-grid').classList.add('active');
+            document.getElementById('btn-list').classList.remove('active');
+            render();
+        });
+
+        document.getElementById('btn-list').addEventListener('click', () => {
+            view = 'list';
+            document.getElementById('btn-list').classList.add('active');
+            document.getElementById('btn-grid').classList.remove('active');
+            render();
+        });
+
+        // ─── INIT ────────────────────────────────────────────────────────────────────
+        // Read page from URL on load
+        const params = new URLSearchParams(window.location.search);
+        const pageFromUrl = parseInt(params.get('page')) || 1;
+        const colorSlugFromUrl = params.get('color');
+        currentPage = pageFromUrl;
+
+        // Color palette for animated logo
+        const colorPalette = [
+            ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#C7CEEA'],
+            ['#FF5E78', '#34D399', '#FBBF24', '#6EE7B7', '#A78BFA'],
+            ['#F87171', '#2DD4BF', '#FCD34D', '#5EEAD4', '#C084FC'],
+            ['#EF4444', '#14B8A6', '#FDE047', '#2ECC71', '#A855F7'],
+            ['#DC2626', '#0D9488', '#FBBF24', '#10B981', '#9333EA']
+        ];
+
+        let colorPaletteIndex = 0;
+
+        function rotateLogoColors() {
+            const spans = document.querySelectorAll('.logo-block h1 span:not(#dot)');
+            const dot = document.getElementById('dot');
+            const currentPalette = colorPalette[colorPaletteIndex % colorPalette.length];
+
+            spans.forEach((span, index) => {
+                span.style.color = currentPalette[index];
+            });
+
+            // Update dot color (use first color in palette)
+            const dotColor = currentPalette[0];
+            if (dot) {
+                dot.style.color = dotColor;
+            }
+
+            // Update favicon with new color
+            const faviconColor = dotColor.replace('#', '%23');
+            const faviconSvg = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='${faviconColor}'/></svg>`;
+            const favicon = document.getElementById('favicon');
+            if (favicon) {
+                favicon.href = faviconSvg;
+            }
+
+            colorPaletteIndex++;
+        }
+
+        // Change logo colors every 3 seconds
+        setInterval(rotateLogoColors, 3000);
+
+        // Handle browser back button
+        window.addEventListener('popstate', () => {
+            const params = new URLSearchParams(window.location.search);
+            const colorSlug = params.get('color');
+
+            if (colorSlug) {
+                // If color slug exists in URL, open that color
+                const colorId = colorSlug.replace(/-/g, '_');
+                const color = COLORS.find(c => c.id === colorId);
+                if (color) {
+                    openModal(color.id);
+                }
+            } else {
+                // If no color slug, close the modal
+                document.getElementById('modal-overlay').classList.remove('open');
+                document.getElementById('dot').style.background = 'currentColor';
+                document.body.classList.remove('modal-open');
+            }
+        });
+
+        async function initializeApp() {
+            await new Promise(resolve => {
+                const checkColors = setInterval(() => {
+                    if (COLORS.length > 0) {
+                        clearInterval(checkColors);
+                        resolve();
+                    }
+                }, 100);
+            });
+
+            // Open color if color slug is in URL
+            if (colorSlugFromUrl) {
+                const colorId = colorSlugFromUrl.replace(/-/g, '_');
+                const color = COLORS.find(c => c.id === colorId);
+                if (color) {
+                    openModal(color.id);
+                }
+            }
+        }
+
+        loadColors().then(() => initializeApp());
+    </script>
+</body>
+
+</html>
