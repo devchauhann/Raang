@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAANG (रंग) — Color Reference</title>
+    <title>Chromatica — Color Reference</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap"
         rel="stylesheet">
@@ -49,7 +49,7 @@
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
-            gap: 20px;
+            gap: 40px;
             flex-wrap: wrap;
             position: sticky;
             top: 0;
@@ -91,28 +91,8 @@
             transition: background 0.3s;
         }
 
-        .logo-block h1 span:not(#dot) {
-            width: auto;
-            height: auto;
-            border-radius: 0;
-            background: transparent;
-            margin-left: 0;
-            margin-bottom: 0;
-        }
-
-        .logo-block h1 #dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: currentColor;
-            margin-left: 4px;
-            vertical-align: middle;
-            margin-bottom: 6px;
-            transition: background 0.3s;
-        }
-
         .logo-block p {
-            font-size: 1.2rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
             letter-spacing: 0.12em;
             text-transform: uppercase;
@@ -808,10 +788,8 @@
 
     <header>
         <div class="logo-block">
-            <h1><span style="color: #FF6B6B;">R</span><span style="color: #4ECDC4;">A</span><span
-                    style="color: #FFE66D;">A</span><span style="color: #95E1D3;">N</span><span
-                    style="color: #C7CEEA;">G</span></h1>
-            <p>रंग</p>
+            <h1>Chromatica<span id="dot"></span></h1>
+            <p> </p>
         </div>
         <div class="header-controls">
             <div class="search-wrap">
@@ -1219,51 +1197,6 @@
         const pageFromUrl = parseInt(params.get('page')) || 1;
         const colorSlugFromUrl = params.get('color');
         currentPage = pageFromUrl;
-
-        // Color palette for animated logo
-        const colorPalette = [
-            ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#C7CEEA'],
-            ['#FF5E78', '#34D399', '#FBBF24', '#6EE7B7', '#A78BFA'],
-            ['#F87171', '#2DD4BF', '#FCD34D', '#5EEAD4', '#C084FC'],
-            ['#EF4444', '#14B8A6', '#FDE047', '#2ECC71', '#A855F7'],
-            ['#DC2626', '#0D9488', '#FBBF24', '#10B981', '#9333EA']
-        ];
-
-        let colorPaletteIndex = 0;
-
-        function rotateLogoColors() {
-            const spans = document.querySelectorAll('.logo-block h1 span:not(#dot)');
-            const currentPalette = colorPalette[colorPaletteIndex % colorPalette.length];
-
-            spans.forEach((span, index) => {
-                span.style.color = currentPalette[index];
-            });
-
-            colorPaletteIndex++;
-        }
-
-        // Change logo colors every 3 seconds
-        setInterval(rotateLogoColors, 3000);
-
-        // Handle browser back button
-        window.addEventListener('popstate', () => {
-            const params = new URLSearchParams(window.location.search);
-            const colorSlug = params.get('color');
-
-            if (colorSlug) {
-                // If color slug exists in URL, open that color
-                const colorId = colorSlug.replace(/-/g, '_');
-                const color = COLORS.find(c => c.id === colorId);
-                if (color) {
-                    openModal(color.id);
-                }
-            } else {
-                // If no color slug, close the modal
-                document.getElementById('modal-overlay').classList.remove('open');
-                document.getElementById('dot').style.background = 'currentColor';
-                document.body.classList.remove('modal-open');
-            }
-        });
 
         async function initializeApp() {
             await new Promise(resolve => {
