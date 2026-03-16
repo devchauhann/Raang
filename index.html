@@ -69,7 +69,7 @@
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: background 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.no-scroll {
@@ -101,7 +101,7 @@
             top: 0;
             z-index: 90;
             background: var(--bg);
-            transition: background 0.3s, border-color 0.3s;
+            transition: background 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .header-inner {
@@ -840,7 +840,6 @@
 
         /* ── FOOTER ──────────────────────────────────────────────────────── */
         footer {
-
             max-width: 1440px;
             margin: 0 auto;
             padding: 22px 40px;
@@ -850,6 +849,17 @@
             flex-wrap: wrap;
             gap: 14px;
             transition: border-color 0.3s;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 35px;
+            right: 35px;
+            height: 1px;
+            background: var(--border);
         }
 
         .ft-brand-logo {
@@ -906,7 +916,7 @@
         }
 
         .ft-copy {
-            font-family: 'DM Mono', monospace;
+            font-family: 'DM Sans';
             font-size: 0.65rem;
             color: var(--text4);
         }
@@ -1309,14 +1319,8 @@
         <a class="logo ft-brand-logo" href="#">
             <span class="logo-word">Chromatica</span><span class="logo-dot"></span>
         </a>
-        <div class="ft-links">
-            <a href="#">Colors</a>
-            <a href="#">API</a>
-            <a href="#">Docs</a>
-            <a href="#">About</a>
-        </div>
         <div class="ft-credit">
-            <span> Designed by <strong>Claude</strong></span>
+            <span> Designed with help of <strong>Claude</strong></span>
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="#D77655" class="bi bi-claude"
                 viewBox="0 0 16 16">
                 <path
@@ -1364,11 +1368,18 @@
     <script>
         /* ── DATA ─────────────────────────────────────────────────────────── */
         let COLORS = [];
+        let ALL_COLORS = [];
+        let DATA_LOADED = false;
 
         function loadColors() {
             return fetch('data.json?v=' + Date.now())
                 .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-                .then(d => { COLORS = d; render(); })
+                .then(d => {
+                    ALL_COLORS = d;
+                    DATA_LOADED = true;
+                    COLORS = d;
+                    render();
+                })
                 .catch(e => { document.getElementById('stat').textContent = 'Error: ' + e.message; });
         }
 
@@ -1392,9 +1403,13 @@
         applyTheme();
 
         document.getElementById('theme-btn').querySelector('input').addEventListener('change', () => {
+            document.documentElement.style.transition = 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)';
             theme = theme === 'warm' ? 'grey' : 'warm';
             localStorage.setItem('ch-theme', theme);
             applyTheme();
+            setTimeout(() => {
+                document.documentElement.style.transition = '';
+            }, 250);
         });
 
         /* ── UTILS ────────────────────────────────────────────────────────── */
@@ -1595,9 +1610,12 @@
             if (event) event.stopPropagation();
             const l = (hex.replace('#', '').match(/.{2}/g).map(x => parseInt(x, 16)).reduce((a, b) => a + b) / 3) > 128 ? '#111' : '#fff';
             const svg = `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&amp;display=swap');</style>
+  </defs>
   <rect width="200" height="200" fill="${hex}" rx="10"/>
-  <text x="100" y="88" font-family="Georgia,serif" font-size="21" fill="${l}" text-anchor="middle" font-weight="bold">${hex.toUpperCase()}</text>
-  <text x="100" y="118" font-family="Georgia,serif" font-size="13" fill="${l}" text-anchor="middle" opacity="0.65">${name}</text>
+  <text x="12" y="178" font-family="DM Sans, sans-serif" font-size="18" fill="${l}" text-anchor="start" font-weight="500">${name}</text>
+  <text x="12" y="195" font-family="DM Sans, sans-serif" font-size="10" fill="${l}" text-anchor="start" opacity="0.75">${hex.toUpperCase()}</text>
 </svg>`;
             const b = new Blob([svg], { type: 'image/svg+xml' });
             const u = URL.createObjectURL(b);
