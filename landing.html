@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="warm">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chromatica — Explore 13,638 Colors</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+    <style>
+        /* ── THEMES ─────────────────────────────────────────────────────── */
+        [data-theme="warm"] {
+            --bg: #faf8f5;
+            --bg2: #f3f0eb;
+            --surface: #ffffff;
+            --border: #e8e3db;
+            --border2: #d6cfc4;
+            --text: #1a1714;
+            --text2: #5c534a;
+            --text3: #9b9088;
+            --text4: #c4bdb6;
+            --accent: #c0622a;
+            --accent-bg: #fdf0e9;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
+            --inv-bg: #1a1714;
+            --inv-text: #faf8f5;
+        }
+
+        [data-theme="grey"] {
+            --bg: #111113;
+            --bg2: #18181b;
+            --surface: #1e1e22;
+            --border: #2a2a30;
+            --border2: #38383f;
+            --text: #ededf0;
+            --text2: #a0a0ab;
+            --text3: #606068;
+            --text4: #404048;
+            --accent: #e0784a;
+            --accent-bg: #261a13;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
+            --inv-bg: #ededf0;
+            --inv-text: #111113;
+        }
+
+        /* ── RESET ──────────────────────────────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        * {
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border2);
+            border-radius: 99px;
+        }
+
+        /* ── HEADER ─────────────────────────────────────────────────────── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            background: var(--bg);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 40px;
+            height: 64px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .logo-word {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        .logo-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: inline-block;
+            margin: 0 1px 1px 1px;
+            flex-shrink: 0;
+            transition: background 0.4s;
+        }
+
+        .hdr-spacer {
+            flex: 1;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            font-size: 0.82rem;
+            color: var(--text2);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .cta-btn {
+            height: 36px;
+            padding: 0 20px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.18s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cta-btn:hover {
+            background: var(--text);
+            transform: translateY(-2px);
+        }
+
+        /* ── SWITCH (Theme Toggle) ──────────────────────────────────────── */
+        .switch {
+            display: block;
+            --width-of-switch: 2.8em;
+            --height-of-switch: 1.6em;
+            --size-of-icon: 1.1em;
+            --slider-offset: 0.25em;
+            position: relative;
+            width: var(--width-of-switch);
+            height: var(--height-of-switch);
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e8e8e8;
+            transition: background-color 0.25s ease;
+            border-radius: 30px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: var(--size-of-icon, 1.1em);
+            width: var(--size-of-icon, 1.1em);
+            border-radius: 50%;
+            left: var(--slider-offset, 0.25em);
+            top: 50%;
+            transform: translateY(-50%);
+            background: #c0622a;
+            transition: left 0.25s ease;
+        }
+
+        input:checked+.slider {
+            background-color: #2c2c2c;
+        }
+
+        input:checked+.slider:before {
+            left: calc(100% - (var(--size-of-icon, 1.1em) + var(--slider-offset, 0.25em)));
+            background: #e0784a;
+        }
+
+        /* ── HERO ───────────────────────────────────────────────────────── */
+        .hero {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 100px 40px 60px;
+            text-align: center;
+        }
+
+        .hero-tagline {
+            font-size: 0.82rem;
+            color: var(--text3);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .hero-title {
+            font-family: 'Lora', serif;
+            font-size: 3.6rem;
+            font-weight: 500;
+            line-height: 1.1;
+            color: var(--text);
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text2);
+            line-height: 1.7;
+            margin-bottom: 48px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 80px;
+        }
+
+        .btn-primary {
+            height: 48px;
+            padding: 0 32px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: var(--text);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            height: 48px;
+            padding: 0 32px;
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--text3);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text);
+            background: var(--bg2);
+        }
+
+        .hero-showcase {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+        }
+
+        .color-sample {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-box {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+
+        .color-box:hover {
+            transform: scale(1.05);
+        }
+
+        .color-name {
+            font-size: 0.7rem;
+            color: var(--text3);
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* ── FEATURES ───────────────────────────────────────────────────── */
+        .features {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 50px 40px 80px;
+        }
+
+        .features-title {
+            font-family: 'Lora', serif;
+            font-size: 2.4rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            padding: 40px;
+            background: var(--surface);
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--accent-bg);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .feature-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke: currentColor;
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .feature-desc {
+            font-size: 0.85rem;
+            color: var(--text3);
+            line-height: 1.6;
+        }
+
+        /* ── STATS ──────────────────────────────────────────────────────── */
+        .stats {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 80px 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 30px;
+        }
+
+        .stat-number {
+            font-family: 'Lora', serif;
+            font-size: 2.8rem;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text3);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* ── USE CASES ───────────────────────────────────────────────────── */
+        .use-cases {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 100px 40px;
+        }
+
+        .uc-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .uc-title {
+            font-family: 'Lora', serif;
+            font-size: 2.4rem;
+            font-weight: 500;
+            color: var(--text);
+            text-align: center;
+            margin-bottom: 60px;
+            letter-spacing: -0.01em;
+        }
+
+        .uc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 32px;
+        }
+
+        .uc-card {
+            padding: 36px;
+            background: var(--surface);
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .uc-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .uc-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-bg);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--accent);
+        }
+
+        .uc-card h3 {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .uc-card p {
+            font-size: 0.85rem;
+            color: var(--text3);
+            line-height: 1.6;
+        }
+
+        /* ── FOOTER ─────────────────────────────────────────────────────── */
+        footer {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .ft-brand-logo {
+            text-decoration: none;
+        }
+
+        .ft-brand-logo .logo-word {
+            font-size: 1.0rem;
+            color: var(--text2);
+        }
+
+        .ft-brand-logo:hover .logo-word {
+            color: var(--text);
+        }
+
+        .ft-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .ft-links a {
+            font-size: 0.76rem;
+            color: var(--text3);
+            text-decoration: none;
+            transition: color 0.18s;
+        }
+
+        .ft-links a:hover {
+            color: var(--text2);
+        }
+
+        .ft-credit {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 12px;
+            transition: border-color 0.18s;
+        }
+
+        .ft-credit span {
+            font-size: 0.72rem;
+            color: var(--text3);
+        }
+
+        .ft-credit strong {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .ft-copy {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text4);
+        }
+
+        /* ── RESPONSIVE ──────────────────────────────────────────────────── */
+        @media (max-width: 960px) {
+
+            .header-inner,
+            .hero,
+            .features,
+            .stats,
+            .use-cases,
+            footer {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            .nav-links {
+                gap: 18px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-inner {
+                height: auto;
+                padding: 12px 16px;
+            }
+
+            .hero {
+                padding: 40px 10px 1px;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+                margin-bottom: 30px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+            }
+
+            .features {
+                padding: 10px 10px 1px;
+            }
+
+            .features-title {
+                font-size: 1.8rem;
+                margin-bottom: 40px;
+            }
+
+            .features-grid {
+                gap: 24px;
+            }
+
+            .feature-card {
+                padding: 20px;
+            }
+
+            .stats {
+                padding: 60px 16px;
+            }
+
+            .stats-grid {
+                gap: 24px;
+            }
+
+            .stat-item {
+                padding: 16px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .use-cases {
+                padding: 60px 16px;
+            }
+
+            .uc-title {
+                font-size: 1.8rem;
+                margin-bottom: 40px;
+            }
+
+            .uc-grid {
+                gap: 20px;
+            }
+
+            .uc-card {
+                padding: 18px;
+            }
+
+            footer {
+                padding: 18px 16px;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .ft-links {
+                gap: 16px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ── HEADER ─────────────────────────────────────────────────────────── -->
+    <header>
+        <div class="header-inner">
+            <a class="logo" href="index.html">
+                <span class="logo-word">Chromatica</span><span class="logo-dot"></span>
+            </a>
+
+            <div class="hdr-spacer"></div>
+
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#stats">Stats</a>
+                <a href="index.html">Explore</a>
+            </nav>
+
+            <label class="switch" id="theme-btn">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+
+            <a href="index.html" class="cta-btn">Browse Colors</a>
+        </div>
+    </header>
+
+    <!-- ── HERO ──────────────────────────────────────────────────────────── -->
+    <section class="hero">
+        <div class="hero-tagline">Discover the spectrum</div>
+        <h1 class="hero-title">Explore Beautiful Colors</h1>
+        <p class="hero-subtitle">Find, search, and export thousands of colors. Perfect for designers, developers, and
+            anyone who loves color.</p>
+        <div class="hero-buttons">
+            <a href="index.html" class="btn-primary">Start Exploring</a>
+        </div>
+    </section>
+
+    <!-- ── FEATURES ──────────────────────────────────────────────────────── -->
+    <section class="features" id="features">
+        <h2 class="features-title">Why Chromatica?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <path d="M12 8v-2m0 12v-2m4-4h2m-12 0h-2"></path>
+                        <path d="M7.22 4.97l1.41 1.41m8.74 8.74l1.41 1.41M4.97 7.22l1.41-1.41m8.74 8.74l1.41-1.41">
+                        </path>
+                    </svg>
+                </div>
+                <div class="feature-title">Massive Library</div>
+                <p class="feature-desc">Access over 13,000 carefully curated colors from the web's most vibrant
+                    palettes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </div>
+                <div class="feature-title">Smart Search</div>
+                <p class="feature-desc">Find colors by name or hex code instantly. Multiple sort options to organize by
+                    hue, brightness, and saturation.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </div>
+                <div class="feature-title">Easy Export</div>
+                <p class="feature-desc">Download colors in multiple formats: HEX, RGB, HSL, CSS, JSON, XML, and more.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                    </svg>
+                </div>
+                <div class="feature-title">Color Details</div>
+                <p class="feature-desc">Get comprehensive information about each color including RGB, HSL, and CSS
+                    values.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="18" rx="2" ry="2"></rect>
+                        <line x1="8" y1="7" x2="16" y2="7"></line>
+                        <line x1="8" y1="11" x2="16" y2="11"></line>
+                    </svg>
+                </div>
+                <div class="feature-title">Responsive Design</div>
+                <p class="feature-desc">Browse colors seamlessly on desktop, tablet, or mobile with our fully optimized
+                    interface.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+                <div class="feature-title">Theme Support</div>
+                <p class="feature-desc">Switch between light and dark themes for a comfortable viewing experience
+                    anytime.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── STATS ─────────────────────────────────────────────────────────── -->
+    <section class="stats" id="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">13,638</div>
+                <div class="stat-label">Colors</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">11+</div>
+                <div class="stat-label">Export Formats</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Possibilities</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Free</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── USE CASES ──────────────────────────────────────────────────────── -->
+    <section class="use-cases">
+        <div class="uc-container">
+            <h2 class="uc-title">Built for Everyone</h2>
+            <div class="uc-grid">
+                <div class="uc-card">
+                    <div class="uc-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z">
+                            </path>
+                            <path d="M12 6v6l4 2.5"></path>
+                        </svg>
+                    </div>
+                    <h3>Designers</h3>
+                    <p>Create consistent color schemes and export to Figma, Adobe XD, or your design tool of choice.</p>
+                </div>
+                <div class="uc-card">
+                    <div class="uc-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Developers</h3>
+                    <p>Export colors as CSS variables, JSON, or code snippets for your project's design system.</p>
+                </div>
+                <div class="uc-card">
+                    <div class="uc-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"></path>
+                        </svg>
+                    </div>
+                    <h3>Content Creators</h3>
+                    <p>Find the perfect colors for your brand, thumbnails, graphics, and visual content.</p>
+                </div>
+                <div class="uc-card">
+                    <div class="uc-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            <circle cx="9" cy="10" r="1"></circle>
+                            <circle cx="12" cy="10" r="1"></circle>
+                            <circle cx="15" cy="10" r="1"></circle>
+                        </svg>
+                    </div>
+                    <h3>Teams</h3>
+                    <p>Share color palettes with your team using unique URLs for consistent brand colors.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FOOTER ─────────────────────────────────────────────────────── -->
+    <footer>
+        <a class="logo ft-brand-logo" href="#">
+            <span class="logo-word">Chromatica</span><span class="logo-dot"></span>
+        </a>
+        <div class="ft-links">
+            <a href="#">About</a>
+            <a href="#">Docs</a>
+            <a href="#">API</a>
+            <a href="#">Privacy</a>
+        </div>
+        <div class="ft-credit">
+            <span> Designed by <strong>Claude</strong></span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="#D77655" class="bi bi-claude"
+                viewBox="0 0 16 16">
+                <path
+                    d="m3.127 10.604 3.135-1.76.053-.153-.053-.085H6.11l-.525-.032-1.791-.048-1.554-.065-1.505-.08-.38-.081L0 7.832l.036-.234.32-.214.455.04 1.009.069 1.513.105 1.097.064 1.626.17h.259l.036-.105-.089-.065-.068-.064-1.566-1.062-1.695-1.121-.887-.646-.48-.327-.243-.306-.104-.67.435-.48.585.04.15.04.593.456 1.267.981 1.654 1.218.242.202.097-.068.012-.049-.109-.181-.9-1.626-.96-1.655-.428-.686-.113-.411a2 2 0 0 1-.068-.484l.496-.674L4.446 0l.662.089.279.242.411.94.666 1.48 1.033 2.014.302.597.162.553.06.17h.105v-.097l.085-1.134.157-1.392.154-1.792.052-.504.25-.605.497-.327.387.186.319.456-.045.294-.19 1.23-.37 1.93-.243 1.29h.142l.161-.16.654-.868 1.097-1.372.484-.545.565-.601.363-.287h.686l.505.751-.226.775-.707.895-.585.759-.839 1.13-.524.904.048.072.125-.012 1.897-.403 1.024-.186 1.223-.21.553.258.06.263-.218.536-1.307.323-1.533.307-2.284.54-.028.02.032.04 1.029.098.44.024h1.077l2.005.15.525.346.315.424-.053.323-.807.411-3.631-.863-.872-.218h-.12v.073l.726.71 1.331 1.202 1.667 1.55.084.383-.214.302-.226-.032-1.464-1.101-.565-.497-1.28-1.077h-.084v.113l.295.432 1.557 2.34.08.718-.112.234-.404.141-.444-.08-.911-1.28-.94-1.44-.759-1.291-.093.053-.448 4.821-.21.246-.484.186-.403-.307-.214-.496.214-.98.258-1.28.21-1.016.19-1.263.112-.42-.008-.028-.092.012-.953 1.307-1.448 1.957-1.146 1.227-.274.109-.477-.247.045-.44.266-.39 1.586-2.018.956-1.25.617-.723-.004-.105h-.036l-4.212 2.736-.75.096-.324-.302.04-.496.154-.162 1.267-.871z" />
+            </svg>
+        </div>
+        <span class="ft-copy">© 2026 Chromatica</span>
+    </footer>
+
+    <script>
+        /* ── THEME ────────────────────────────────────────────────────────── */
+        let theme = localStorage.getItem('ch-theme') || 'warm';
+
+        function applyTheme() {
+            document.documentElement.setAttribute('data-theme', theme);
+            const input = document.getElementById('theme-btn').querySelector('input');
+            if (input) input.checked = theme === 'grey';
+        }
+
+        applyTheme();
+
+        document.getElementById('theme-btn').querySelector('input').addEventListener('change', () => {
+            theme = theme === 'warm' ? 'grey' : 'warm';
+            localStorage.setItem('ch-theme', theme);
+            applyTheme();
+        });
+    </script>
+</body>
+
+</html>

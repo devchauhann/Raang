@@ -144,8 +144,8 @@
 
         /* search */
         .search-wrap {
-            flex: 1;
-            max-width: 360px;
+            flex: 0 0 auto;
+            width: 220px;
             position: relative;
         }
 
@@ -913,7 +913,7 @@
 
         /* ── HAMBURGER ───────────────────────────────────────────────────── */
         .hamburger {
-            display: none;
+            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: flex-end;
@@ -963,8 +963,6 @@
 
         /* ── MOBILE SLIDE-DOWN MENU ──────────────────────────────────────── */
         .mob-menu {
-            display: none;
-            /* only visible on mobile */
             overflow: hidden;
             max-height: 0;
             transition: max-height 0.32s cubic-bezier(0.4, 0, 0.2, 1),
@@ -973,6 +971,9 @@
             opacity: 0;
             border-top: 1px solid transparent;
             background: var(--bg);
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 40px;
         }
 
         .mob-menu.open {
@@ -982,7 +983,7 @@
         }
 
         .mob-menu-inner {
-            padding: 14px 16px 18px;
+            padding: 14px 0 18px;
             display: flex;
             flex-direction: column;
             gap: 4px;
@@ -1025,6 +1026,15 @@
             padding-top: 8px;
             font-variant-numeric: tabular-nums;
             text-align: center;
+        }
+
+        /* Hide controls and stat on desktop, show only search and hamburger */
+        .hdr-controls {
+            display: none !important;
+        }
+
+        .stat-label {
+            display: none;
         }
 
         /* ── RESPONSIVE ──────────────────────────────────────────────────── */
@@ -1079,7 +1089,8 @@
 
             .search-wrap {
                 grid-area: srch;
-                max-width: 100%;
+                width: 100%;
+                max-width: none;
             }
 
             .search-wrap input {
@@ -1158,6 +1169,9 @@
                 <span class="logo-word">Chromatica</span><span class="logo-dot" id="logo-dot"></span>
             </a>
 
+            <div class="hdr-spacer"></div>
+            <span class="stat-label" id="stat"></span>
+
             <div class="search-wrap">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
                     stroke-linecap="round">
@@ -1166,9 +1180,6 @@
                 </svg>
                 <input id="search" type="text" placeholder="Search name or hex…" autocomplete="off" />
             </div>
-
-            <div class="hdr-spacer"></div>
-            <span class="stat-label" id="stat"></span>
 
             <!-- Desktop controls (hidden on mobile) -->
             <div class="hdr-controls" id="hdr-controls">
@@ -1305,7 +1316,7 @@
             <a href="#">About</a>
         </div>
         <div class="ft-credit">
-            <span>vibe coded by <strong>Claude</strong></span>
+            <span> Designed by <strong>Claude</strong></span>
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="#D77655" class="bi bi-claude"
                 viewBox="0 0 16 16">
                 <path
