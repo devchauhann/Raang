@@ -868,15 +868,23 @@
         let COLORS = [];
 
         function loadColors() {
-            return fetch('data.json')
-                .then(response => response.json())
+            const cacheBuster = '?v=' + new Date().getTime();
+            return fetch('data.json' + cacheBuster)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    console.log(`Loaded ${data.length} colors`);
                     COLORS = data;
                     render();
                     return COLORS;
                 })
                 .catch(e => {
                     console.error('Failed to load colors:', e);
+                    document.getElementById('stat').textContent = 'Error loading colors: ' + e.message;
                     return [];
                 });
         }
@@ -1054,25 +1062,40 @@
         const FORMATS = {
             hex: c => c.hex.toUpperCase(),
             rgb: c => `rgb(${c.rgb.join(', ')})`,
-            hsl: c => { const h = hexToHsl(c.hex); return `hsl(${h[0]}, ${h[1]}%, ${h[2]}%)`; },
-            css: c => `--color-${c.id.replace(/_/g, '-')}: ${c.hex};`,
+            hsl: c => c.hsl || (() => { const h = hexToHsl(c.hex); return `hsl(${h[0]}, ${h[1]}%, ${h[2]}%)`; })(),
+            css: c => c.css || `--color-${c.id.replace(/_/g, '-')}: ${c.hex};`,
             json: c => `{\n  "name": "${c.name}",\n  "hex": "${c.hex}",\n  "rgb": [${c.rgb.join(', ')}]\n}`,
-            csv: c => `${c.id},"${c.name}",${c.hex},${c.rgb.join(',')}`,
-            c: c => `#define COLOR_${c.id.toUpperCase()} 0x${c.hex.slice(1).toUpperCase()}UL`,
-            xml: c => `<color id="${c.id}" hex="${c.hex}" red="${c.rgb[0]}" green="${c.rgb[1]}" blue="${c.rgb[2]}">${c.name}</color>`,
+            csv: c => c.csv || `${c.id},"${c.name}",${c.hex},${c.rgb.join(',')}`,
+            c: c => c.c || `#define COLOR_${c.id.toUpperCase()} 0x${c.hex.slice(1).toUpperCase()}UL`,
+            xml: c => c.xml || `<color id="${c.id}" hex="${c.hex}" red="${c.rgb[0]}" green="${c.rgb[1]}" blue="${c.rgb[2]}">${c.name}</color>`,
         };
 
         function openModal(id) {
             const c = COLORS.find(x => x.id === id);
             if (!c) return;
             activeColor = c;
-            const hsl = hexToHsl(c.hex);
+
+            // Use pre-generated HSL if available, otherwise calculate
+            let hslText = '';
+            if (c.hsl) {
+                // Parse pre-generated HSL string like "hsl(33, 23%, 49%)"
+                const match = c.hsl.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+                if (match) {
+                    hslText = `${match[1]}°, ${match[2]}%, ${match[3]}%`;
+                } else {
+                    hslText = c.hsl;
+                }
+            } else {
+                const hsl = hexToHsl(c.hex);
+                hslText = `${hsl[0]}°, ${hsl[1]}%, ${hsl[2]}%`;
+            }
+
             document.getElementById('modal-hero').style.background = c.hex;
             document.getElementById('modal-title').textContent = c.name;
             document.getElementById('modal-id').textContent = c.id;
             document.getElementById('modal-hex').textContent = c.hex.toUpperCase();
             document.getElementById('modal-rgb').textContent = `${c.rgb[0]}, ${c.rgb[1]}, ${c.rgb[2]}`;
-            document.getElementById('modal-hsl').textContent = `${hsl[0]}°, ${hsl[1]}%, ${hsl[2]}%`;
+            document.getElementById('modal-hsl').textContent = hslText;
 
             // Update dot
             document.getElementById('dot').style.background = c.hex;
