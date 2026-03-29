@@ -1,0 +1,69 @@
+{
+    "name": "Colors Database",
+    "short_name": "Colors DB",
+    "description": "The most comprehensive color database with 13,638+ color palettes. Search, explore, and export colors in multiple formats.",
+    "start_url": "https://colorsdatabase.vercel.app/",
+    "display": "standalone",
+    "background_color": "#faf8f5",
+    "theme_color": "#c0622a",
+    "scope": "/",
+    "icons": [
+        {
+            "src": "/favicon/web-app-manifest-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/favicon/web-app-manifest-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/favicon/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/favicon/favicon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ],
+    "categories": [
+        "productivity",
+        "utilities"
+    ],
+    "screenshots": [
+        {
+            "src": "/og-image.png",
+            "sizes": "1200x630",
+            "type": "image/png",
+            "form_factor": "wide"
+        },
+        {
+            "src": "/favicon/web-app-manifest-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "form_factor": "narrow"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Search Colors",
+            "short_name": "Search",
+            "description": "Search the color database",
+            "url": "/?view=grid",
+            "icons": [
+                {
+                    "src": "/favicon/favicon-96x96.png",
+                    "sizes": "96x96",
+                    "type": "image/png"
+                }
+            ]
+        }
+    ]
+}

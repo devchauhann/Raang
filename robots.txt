@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Disallow: 
+
+# Crawl delay to prevent overloading
+Crawl-delay: 1
+
+# Sitemaps
+Sitemap: https://colorsdatabase.vercel.app/sitemap.xml
+
+# Google Search Console
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
