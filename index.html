@@ -859,6 +859,112 @@
             background: rgba(0, 0, 0, 0.45);
         }
 
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.25);
+            border: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s;
+            z-index: 2;
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.45);
+        }
+
+        /* Modal Top Controls */
+        .modal-controls {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 3;
+        }
+
+        .modal-icon-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.25);
+            border: none;
+            color: rgba(255, 255, 255, 0.85);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s;
+            flex-shrink: 0;
+        }
+
+        .modal-icon-btn:hover {
+            background: rgba(0, 0, 0, 0.45);
+        }
+
+        .modal-icon-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Download Dropdown Menu */
+        .download-dropdown-wrapper {
+            position: relative;
+        }
+
+        .download-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            display: none;
+            flex-direction: column;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-top: 4px;
+            z-index: 10;
+            min-width: 140px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .download-menu.show {
+            display: flex;
+        }
+
+        .download-menu-item {
+            padding: 10px 14px;
+            background: none;
+            border: none;
+            color: var(--text2);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.15s, color 0.15s;
+            white-space: nowrap;
+        }
+
+        .download-menu-item:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .download-menu-item:not(:last-child) {
+            border-bottom: 1px solid var(--border);
+        }
+
         .modal-body {
             padding: 22px 24px 26px;
         }
@@ -1508,7 +1614,38 @@
     <div class="modal-bg" id="modal-bg">
         <div class="modal" id="modal">
             <div class="modal-swatch" id="modal-swatch"></div>
-            <button class="modal-close" onclick="closeModal()">✕</button>
+
+            <!-- Modal Top Controls -->
+            <div class="modal-controls">
+                <button class="modal-icon-btn" id="share-btn" title="Share" onclick="shareColor()">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="m13.9549 5.18341 4.9779 4.42474c0.9306 0.82715 1.3958 1.24075 1.5673 1.72915 0.1506 0.4289 0.1506 0.8962 0 1.3251 -0.1715 0.4884 -0.6367 0.902 -1.5673 1.7292l-4.9779 4.4247c-0.4223 0.3754 -0.6334 0.5631 -0.8127 0.5698 -0.1558 0.0058 -0.3055 -0.0614 -0.4046 -0.1817 -0.1141 -0.1385 -0.1141 -0.421 -0.1141 -0.986v-2.79c-2.4281 0 -4.99269 0.7799 -6.86531 2.1642 -0.97489 0.7207 -1.46236 1.0811 -1.64802 1.0669 -0.18098 -0.0139 -0.29583 -0.0845 -0.38973 -0.2399 -0.09633 -0.1593 -0.01125 -0.6572 0.15892 -1.653 1.10498 -6.4662 5.55495 -8.19531 8.74414 -8.19531V5.78134c0 -0.56502 0 -0.84753 0.1141 -0.98603 0.0991 -0.12033 0.2488 -0.18751 0.4046 -0.18168 0.1793 0.00671 0.3904 0.1944 0.8127 0.56978Z"
+                            fill="currentColor"></path>
+                    </svg>
+                </button>
+                <div class="download-dropdown-wrapper">
+                    <button class="modal-icon-btn" id="download-btn" title="Download" onclick="toggleDownloadMenu()">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path
+                                d="M22.67 16.94a1.22 1.22 0 0 0 -1.22 1.21V20a1.57 1.57 0 0 1 -1.57 1.57H4.12A1.57 1.57 0 0 1 2.55 20v-1.85a1.22 1.22 0 0 0 -2.43 0V20a4 4 0 0 0 4 4h15.76a4 4 0 0 0 4 -4v-1.85a1.21 1.21 0 0 0 -1.21 -1.21Z"
+                                fill="currentColor"></path>
+                            <path
+                                d="M12 0a1.94 1.94 0 0 0 -1.94 1.94V11a0.25 0.25 0 0 1 -0.25 0.25H7.15a1 1 0 0 0 -0.73 1.6l4.85 5.58a1 1 0 0 0 1.46 0l4.85 -5.58a1 1 0 0 0 -0.73 -1.6h-2.66a0.25 0.25 0 0 1 -0.25 -0.25V1.94A1.94 1.94 0 0 0 12 0Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </button>
+                    <div class="download-menu" id="download-menu">
+                        <button class="download-menu-item" onclick="downloadAsFormat('txt')"> TXT</button>
+                        <button class="download-menu-item" onclick="downloadAsFormat('png')"> PNG</button>
+                        <button class="download-menu-item" onclick="downloadAsFormat('svg')"> SVG</button>
+                        <button class="download-menu-item" onclick="downloadAsFormat('json')"> JSON</button>
+                        <button class="download-menu-item" onclick="downloadAsFormat('csv')"> CSV</button>
+                    </div>
+                </div>
+                <button class="modal-icon-btn" onclick="closeModal()">✕</button>
+            </div>
+
             <div class="modal-body">
                 <div class="modal-name" id="modal-name"></div>
                 <div class="modal-id" id="modal-cid"></div>
@@ -1766,6 +1903,147 @@
             copy(map[type]);
         }
 
+        function shareColor() {
+            if (!active) return;
+            const text = `Check out ${active.name} (${active.hex}) on Colors Database`;
+            const url = `${window.location.origin}${window.location.pathname}?color=${active.id.replace(/_/g, '-')}`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: active.name,
+                    text: text,
+                    url: url
+                }).catch(err => console.log('Error sharing:', err));
+            } else {
+                copy(url);
+            }
+        }
+
+        function toggleDownloadMenu() {
+            const menu = document.getElementById('download-menu');
+            menu.classList.toggle('show');
+        }
+
+        function downloadAsFormat(format) {
+            if (!active) return;
+            const name = active.name.replace(/\s+/g, '-').toLowerCase();
+
+            let content, filename, mimeType;
+
+            switch (format) {
+                case 'txt':
+                    content = `${active.name} ${active.hex} ${active.rgb.join(', ')}`;
+                    filename = `${name}.txt`;
+                    mimeType = 'text/plain';
+                    break;
+                case 'svg':
+                    const l = (active.hex.replace('#', '').match(/.{2}/g).map(x => parseInt(x, 16)).reduce((a, b) => a + b) / 3) > 128 ? '#111' : '#fff';
+                    content = `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&amp;display=swap');</style>
+  </defs>
+  <rect width="200" height="200" fill="${active.hex}" rx="10"/>
+  <text x="12" y="178" font-family="DM Sans, sans-serif" font-size="18" fill="${l}" text-anchor="start" font-weight="500">${active.name}</text>
+  <text x="12" y="195" font-family="DM Sans, sans-serif" font-size="10" fill="${l}" text-anchor="start" opacity="0.75">${active.hex.toUpperCase()}</text>
+</svg>`;
+                    filename = `${name}.svg`;
+                    mimeType = 'image/svg+xml';
+                    break;
+                case 'json':
+                    content = JSON.stringify({
+                        name: active.name,
+                        hex: active.hex,
+                        rgb: active.rgb,
+                        id: active.id
+                    }, null, 2);
+                    filename = `${name}.json`;
+                    mimeType = 'application/json';
+                    break;
+                case 'csv':
+                    content = `${active.id},"${active.name}",${active.hex},${active.rgb.join(',')}`;
+                    filename = `${name}.csv`;
+                    mimeType = 'text/csv';
+                    break;
+                case 'png':
+                    // For PNG, we'll create a simple canvas-based export
+                    createPNGExport();
+                    closeDownloadMenu();
+                    return;
+                default:
+                    return;
+            }
+
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            toast(`Downloaded ${format.toUpperCase()}`);
+            closeDownloadMenu();
+        }
+
+        function createPNGExport() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 200;
+            canvas.height = 200;
+            const ctx = canvas.getContext('2d');
+
+            // Fill background with color
+            ctx.fillStyle = active.hex;
+            ctx.fillRect(0, 0, 200, 200);
+
+            // Determine text color (light or dark)
+            const l = (active.hex.replace('#', '').match(/.{2}/g).map(x => parseInt(x, 16)).reduce((a, b) => a + b) / 3) > 128 ? '#111' : '#fff';
+            ctx.fillStyle = l;
+
+            // Add color name
+            ctx.font = "500 18px 'DM Sans'";
+            ctx.textAlign = 'start';
+            ctx.fillText(active.name, 12, 178);
+
+            // Add hex value
+            ctx.font = "400 10px 'DM Sans'";
+            ctx.globalAlpha = 0.75;
+            ctx.fillText(active.hex.toUpperCase(), 12, 195);
+
+            // Download PNG
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${active.name.replace(/\s+/g, '-').toLowerCase()}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                toast('Downloaded PNG');
+            });
+        }
+
+        function closeDownloadMenu() {
+            const menu = document.getElementById('download-menu');
+            menu.classList.remove('show');
+        }
+
+        function downloadColor() {
+            if (!active) return;
+            const text = `${active.name} ${active.hex} ${active.rgb.join(', ')}`;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${active.name.replace(/\s+/g, '-').toLowerCase()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            toast('Downloaded');
+        }
+
         function closeModal() {
             document.getElementById('modal-bg').classList.remove('open');
             document.getElementById('logo-dot').style.background = '';
@@ -1780,6 +2058,14 @@
         });
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+        // Close download menu when clicking outside
+        document.addEventListener('click', e => {
+            const downloadWrapper = document.querySelector('.download-dropdown-wrapper');
+            if (downloadWrapper && !downloadWrapper.contains(e.target)) {
+                closeDownloadMenu();
+            }
+        });
 
         /* ── DOWNLOAD ─────────────────────────────────────────────────────── */
         function dlColor(hex, name) {
