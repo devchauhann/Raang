@@ -221,6 +221,12 @@
             transition: background 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Disable transitions during theme switch for performance */
+        html.theme-switching,
+        html.theme-switching * {
+            transition: none !important;
+        }
+
         body.no-scroll {
             overflow: hidden;
         }
@@ -1571,13 +1577,15 @@
         applyTheme();
 
         document.getElementById('theme-btn').querySelector('input').addEventListener('change', () => {
-            document.documentElement.style.transition = 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)';
+            // Disable all transitions temporarily during theme change
+            document.documentElement.classList.add('theme-switching');
             theme = theme === 'warm' ? 'grey' : 'warm';
             localStorage.setItem('ch-theme', theme);
             applyTheme();
-            setTimeout(() => {
-                document.documentElement.style.transition = '';
-            }, 250);
+            // Re-enable transitions after theme change completes
+            requestAnimationFrame(() => {
+                document.documentElement.classList.remove('theme-switching');
+            });
         });
 
         /* ── UTILS ────────────────────────────────────────────────────────── */
@@ -1846,9 +1854,15 @@
 
         // Theme — mobile mirrors desktop
         document.getElementById('theme-btn-mob').querySelector('input').addEventListener('change', () => {
+            // Disable all transitions temporarily during theme change
+            document.documentElement.classList.add('theme-switching');
             theme = theme === 'warm' ? 'grey' : 'warm';
             localStorage.setItem('ch-theme', theme);
             applyTheme();
+            // Re-enable transitions after theme change completes
+            requestAnimationFrame(() => {
+                document.documentElement.classList.remove('theme-switching');
+            });
         });
 
         function updateMobThemeLabel() {
