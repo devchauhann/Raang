@@ -323,7 +323,7 @@
             color: var(--text);
             font-family: 'DM Sans', sans-serif;
             font-size: 0.82rem;
-            padding: 0 14px 0 38px;
+            padding: 0 50px 0 38px;
             outline: none;
             transition: border-color 0.2s, background 0.3s, box-shadow 0.2s;
         }
@@ -336,6 +336,24 @@
             border-color: var(--accent);
             background: var(--surface);
             box-shadow: 0 0 0 3px var(--accent-bg);
+        }
+
+        .search-kbd {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--border);
+            color: var(--text3);
+            padding: 3px 7px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-family: 'DM Mono', monospace;
+            font-weight: 500;
+            pointer-events: none;
+            border: 1px solid var(--border2);
+            white-space: nowrap;
+            letter-spacing: 0.05em;
         }
 
         /* spacer */
@@ -1381,6 +1399,10 @@
                 border-radius: 10px;
             }
 
+            .search-kbd {
+                display: none;
+            }
+
             /* hide everything else */
             .hdr-controls {
                 display: none !important;
@@ -1461,7 +1483,9 @@
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.35-4.35" />
                 </svg>
-                <input id="search" type="text" placeholder="Search name or hex…" autocomplete="off" />
+                <input id="search" type="text" placeholder="Search name or hex…" autocomplete="off"
+                    title="Press Cmd+K to focus search (or Ctrl+K on Windows/Linux)" />
+                <kbd class="search-kbd">⌘K</kbd>
             </div>
 
             <!-- GitHub Icon -->
@@ -1851,6 +1875,133 @@
             xml: c => `<color id="${c.id}" hex="${c.hex}" r="${c.rgb[0]}" g="${c.rgb[1]}" b="${c.rgb[2]}">${c.name}</color>`,
         };
 
+        function updateColorSEO(c) {
+            // Update page title
+            document.title = `${c.name} - ${c.hex.toUpperCase()} | Colors Database`;
+
+            // Update meta description
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (!metaDesc) {
+                metaDesc = document.createElement('meta');
+                metaDesc.name = 'description';
+                document.head.appendChild(metaDesc);
+            }
+            metaDesc.content = `Explore ${c.name} (${c.hex}) color. RGB: rgb(${c.rgb.join(', ')}). HSL values, hex code, and export options available on Colors Database.`;
+
+            // Update Open Graph meta tags
+            const ogTitle = document.querySelector('meta[property="og:title"]') || createMetaTag('og:title');
+            ogTitle.content = `${c.name} - ${c.hex.toUpperCase()} | Colors Database`;
+
+            const ogDesc = document.querySelector('meta[property="og:description"]') || createMetaTag('og:description');
+            ogDesc.content = `${c.name} color details. Hex: ${c.hex}, RGB: rgb(${c.rgb.join(', ')}). Download as SVG, PNG, JSON, or export in your preferred format.`;
+
+            const ogUrl = document.querySelector('meta[property="og:url"]') || createMetaTag('og:url');
+            ogUrl.content = `${window.location.origin}${window.location.pathname}?color=${c.id.replace(/_/g, '-')}`;
+
+            // Update Twitter Card meta tags
+            const twitterTitle = document.querySelector('meta[name="twitter:title"]') || createMetaTag('twitter:title');
+            twitterTitle.content = `${c.name} - ${c.hex.toUpperCase()}`;
+
+            const twitterDesc = document.querySelector('meta[name="twitter:description"]') || createMetaTag('twitter:description');
+            twitterDesc.content = `View ${c.name} color: ${c.hex} | RGB: rgb(${c.rgb.join(', ')}) | Export as SVG, PNG, JSON & more`;
+
+            // Update canonical URL
+            let canonical = document.querySelector('link[rel="canonical"]');
+            if (!canonical) {
+                canonical = document.createElement('link');
+                canonical.rel = 'canonical';
+                document.head.appendChild(canonical);
+            }
+            canonical.href = `${window.location.origin}${window.location.pathname}?color=${c.id.replace(/_/g, '-')}`;
+
+            // Add/Update JSON-LD Schema for Color
+            updateColorSchema(c);
+        }
+
+        function createMetaTag(name) {
+            const tag = document.createElement('meta');
+            if (name.includes(':')) {
+                tag.setAttribute('property', name);
+            } else {
+                tag.setAttribute('name', name);
+            }
+            document.head.appendChild(tag);
+            return tag;
+        }
+
+        function updateColorSchema(c) {
+            // Remove old color schema if exists
+            let oldSchema = document.getElementById('color-schema');
+            if (oldSchema) oldSchema.remove();
+
+            const h = hsl(c.hex);
+            const colorSchema = {
+                "@context": "https://schema.org",
+                "@type": "Thing",
+                "name": c.name,
+                "description": `${c.name} is a color with hex code ${c.hex}, RGB values ${c.rgb.join(', ')}, and HSL values ${h[0]}°, ${h[1]}%, ${h[2]}%.`,
+                "image": `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='200' height='200' fill='${encodeURIComponent(c.hex)}'/%3E%3C/svg%3E`,
+                "sameAs": `https://colorsdatabase.vercel.app?color=${c.id.replace(/_/g, '-')}`,
+                "url": `https://colorsdatabase.vercel.app?color=${c.id.replace(/_/g, '-')}`,
+                "identifier": {
+                    "@type": "PropertyValue",
+                    "name": "Hex Code",
+                    "value": c.hex.toUpperCase()
+                },
+                "color": c.hex,
+                "isPartOf": {
+                    "@type": "WebSite",
+                    "name": "Colors Database",
+                    "url": "https://colorsdatabase.vercel.app"
+                }
+            };
+
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.id = 'color-schema';
+            script.textContent = JSON.stringify(colorSchema);
+            document.head.appendChild(script);
+
+            // Add BreadcrumbList schema for navigation
+            updateBreadcrumbSchema(c);
+        }
+
+        function updateBreadcrumbSchema(c) {
+            let oldBreadcrumb = document.getElementById('breadcrumb-schema');
+            if (oldBreadcrumb) oldBreadcrumb.remove();
+
+            const breadcrumbSchema = {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://colorsdatabase.vercel.app"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Colors",
+                        "item": "https://colorsdatabase.vercel.app"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": c.name,
+                        "item": `https://colorsdatabase.vercel.app?color=${c.id.replace(/_/g, '-')}`
+                    }
+                ]
+            };
+
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.id = 'breadcrumb-schema';
+            script.textContent = JSON.stringify(breadcrumbSchema);
+            document.head.appendChild(script);
+        }
+
         function openModal(id) {
             const c = COLORS.find(x => x.id === id); if (!c) return;
             active = c;
@@ -1878,6 +2029,9 @@
             const p = new URLSearchParams(window.location.search);
             p.set('color', c.id.replace(/_/g, '-'));
             history.replaceState({}, '', location.pathname + '?' + p);
+
+            // Update SEO for this color
+            updateColorSEO(c);
 
             document.getElementById('modal-bg').classList.add('open');
             document.body.classList.add('no-scroll');
@@ -2051,13 +2205,77 @@
             const p = new URLSearchParams(window.location.search);
             p.delete('color');
             history.replaceState({}, '', p.toString() ? location.pathname + '?' + p : location.pathname);
+
+            // Reset SEO to default
+            resetSEO();
+        }
+
+        function resetSEO() {
+            // Reset title
+            document.title = 'Colors Database - 13,638+ Color Palettes & Reference Tool';
+
+            // Reset meta description
+            const metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) {
+                metaDesc.content = 'Colors Database - Explore, search, and download 13,638+ color palettes. Find perfect colors by name, hex code, RGB values. Free color reference tool for designers and developers.';
+            }
+
+            // Reset OG tags
+            const ogTitle = document.querySelector('meta[property="og:title"]');
+            if (ogTitle) {
+                ogTitle.content = 'Colors Database - 13,638+ Color Palettes & Reference Tool';
+            }
+
+            const ogDesc = document.querySelector('meta[property="og:description"]');
+            if (ogDesc) {
+                ogDesc.content = 'Explore, search, and download 13,638+ color palettes. Find perfect colors by name, hex code, RGB values. Free color reference tool for designers and developers.';
+            }
+
+            const ogUrl = document.querySelector('meta[property="og:url"]');
+            if (ogUrl) {
+                ogUrl.content = 'https://colorsdatabase.vercel.app/';
+            }
+
+            // Reset Twitter tags
+            const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+            if (twitterTitle) {
+                twitterTitle.content = 'Colors Database - Color Reference Tool';
+            }
+
+            const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+            if (twitterDesc) {
+                twitterDesc.content = 'Search 13,638+ colors. Export as SVG, CSS, JSON, and more.';
+            }
+
+            // Reset canonical
+            const canonical = document.querySelector('link[rel="canonical"]');
+            if (canonical) {
+                canonical.href = 'https://colorsdatabase.vercel.app';
+            }
+
+            // Remove color-specific schemas
+            const colorSchema = document.getElementById('color-schema');
+            if (colorSchema) colorSchema.remove();
+
+            const breadcrumbSchema = document.getElementById('breadcrumb-schema');
+            if (breadcrumbSchema) breadcrumbSchema.remove();
         }
 
         document.getElementById('modal-bg').addEventListener('click', e => {
             if (e.target === document.getElementById('modal-bg')) closeModal();
         });
 
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+        document.addEventListener('keydown', e => {
+            // Escape key to close modal
+            if (e.key === 'Escape') closeModal();
+
+            // Cmd+K (Mac) or Ctrl+K (Windows/Linux) to focus search
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('search').focus();
+                document.getElementById('search').select();
+            }
+        });
 
         // Close download menu when clicking outside
         document.addEventListener('click', e => {
